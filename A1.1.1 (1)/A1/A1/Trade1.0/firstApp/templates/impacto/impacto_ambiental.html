@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="text-center mb-5">
+    <h1 class="display-5 fw-bold text-success"><i class="bi bi-globe-americas"></i> Nuestro Impacto</h1>
+    <p class="lead text-muted">Cada objeto reutilizado es un respiro para el planeta. Conoce las métricas de la plataforma.</p>
+</div>
+
+<div class="row g-4 text-center">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100 bg-light">
+            <div class="card-body py-5">
+                <i class="bi bi-cloud-haze2 text-primary" style="font-size: 3rem;"></i>
+                <h2 class="display-4 fw-bold mt-3">{{ kg_co2_evitado }} kg</h2>
+                <h5 class="text-muted">CO2 Evitado</h5>
+                <p class="small text-secondary">Al no producir artículos nuevos.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100 bg-light">
+            <div class="card-body py-5">
+                <i class="bi bi-trash3 text-danger" style="font-size: 3rem;"></i>
+                <h2 class="display-4 fw-bold mt-3">{{ kg_residuos_evitados }} kg</h2>
+                <h5 class="text-muted">Basura Evitada</h5>
+                <p class="small text-secondary">Artículos salvados del vertedero.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5 card shadow-sm border-0">
+    <div class="card-body">
+        <h4 class="card-title mb-4">Últimos Trades Ecológicos</h4>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-success">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Categoría del Objeto</th>
+                        <th>Comuna</th>
+                        <th>Impacto Estimado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in trades %}
+                    <tr>
+                        <td>{{ t.fecha }}</td>
+                        <td>{{ t.publicacion.categoria }}</td>
+                        <td>{{ t.publicacion.id_comu.nombre_comuna }}</td>
+                        <td><span class="badge bg-success">-5 kg CO2</span></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">Aún no hay trades ecológicos registrados. ¡Empieza a intercambiar!</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

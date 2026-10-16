@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Chat del Trade: #ID_DEL_TRADE</h5>
+        <span class="badge bg-success">Acordando</span>
+    </div>
+    <div class="card-body" style="height: 400px; overflow-y: auto; background-color: #f8f9fa;">
+        
+        <div class="d-flex mb-3">
+            <div class="p-3 bg-white border rounded shadow-sm" style="max-width: 75%;">
+                <small class="text-muted fw-bold">Usuario Interesado</small><br>
+                ¡Hola! Me interesa mucho tu publicación. ¿Te sirve encontrarnos en el Metro Baquedano?
+            </div>
+        </div>
+
+        <div class="d-flex mb-3 justify-content-end">
+            <div class="p-3 bg-success text-white rounded shadow-sm" style="max-width: 75%;">
+                <small class="text-white-50 fw-bold">Tú</small><br>
+                ¡Hola! Sí, me parece perfecto. ¿Mañana a las 15:00 hrs?
+            </div>
+        </div>
+
+    </div>
+    <div class="card-footer bg-white">
+        <form class="d-flex">
+            <input type="text" class="form-control me-2" placeholder="Escribe un mensaje..." required>
+            <button class="btn btn-primary" type="submit"><i class="bi bi-send"></i> Enviar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card shadow-sm border-0 my-4">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Chat del Trade: #{{ conversacion.id_conversacion }}</h5>
+        <span class="badge bg-success">{{ conversacion.estado }}</span>
+    </div>
+    
+    <div class="card-body" style="height: 400px; overflow-y: auto; background-color: #f8f9fa;">
+        
+        {% for m in mensajes %}
+            {% if m.id_usu.id_usu == usuario_actual.id_usu %}
+                <!-- Mensaje propio -->
+                <div class="d-flex mb-3 justify-content-end">
+                    <div class="p-3 bg-success text-white rounded shadow-sm" style="max-width: 75%;">
+                        <small class="text-white-50 fw-bold">Tú</small><br>
+                        {{ m.contenido }}
+                        <div class="text-end" style="font-size: 0.75rem; opacity: 0.8;">{{ m.fecha_envio|date:"H:i" }}</div>
+                    </div>
+                </div>
+            {% else %}
+                <!-- Mensaje del otro usuario -->
+                <div class="d-flex mb-3">
+                    <div class="p-3 bg-white border rounded shadow-sm" style="max-width: 75%;">
+                        <small class="text-muted fw-bold">{{ m.id_usu.nombre_usuario }}</small><br>
+                        {{ m.contenido }}
+                        <div class="text-end" style="font-size: 0.75rem; color: #888;">{{ m.fecha_envio|date:"H:i" }}</div>
+                    </div>
+                </div>
+            {% endif %}
+        {% empty %}
+            <div class="text-center text-muted my-5">
+                <p>No hay mensajes en este chat todavía. ¡Escribe el primero!</p>
+            </div>
+        {% endfor %}
+
+    </div>
+    
+    <div class="card-footer bg-white">
+        <form method="POST" class="d-flex">
+            {% csrf_token %}
+            <input type="text" name="contenido" class="form-control me-2" placeholder="Escribe un mensaje..." required autocomplete="off">
+            <button class="btn btn-primary" type="submit"><i class="bi bi-send"></i> Enviar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

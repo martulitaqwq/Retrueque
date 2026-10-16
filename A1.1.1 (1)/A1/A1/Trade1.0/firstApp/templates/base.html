@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retrueque - Economía Circular</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --eco-dark-green: #2C5E3B; 
+            --eco-light-green: #528265; 
+            --eco-sand: #F4F1EA; 
+            --eco-accent: #D4A373; 
+        }
+        
+        body {
+            background-color: var(--eco-sand) !important;
+        }
+
+        
+        .navbar-eco {
+            background-color: var(--eco-dark-green) !important;
+        }
+
+        
+        .btn-success {
+            background-color: var(--eco-dark-green) !important;
+            border-color: var(--eco-dark-green) !important;
+        }
+        .btn-success:hover {
+            background-color: var(--eco-light-green) !important;
+            border-color: var(--eco-light-green) !important;
+        }
+
+        
+        .card {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        
+        .card-header.bg-primary, .card-header.bg-success, .card-header.bg-dark {
+            background-color: var(--eco-light-green) !important;
+            border-radius: 12px 12px 0 0 !important;
+            border: none;
+        }
+
+        
+        .text-success {
+            color: var(--eco-dark-green) !important;
+        }
+    </style>
+</head>
+<body>
+
+    
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-eco mb-4 shadow-sm">
+        <div class="container">
+            
+            <a class="navbar-brand fw-bold" href="{% url 'inicio' %}"><i class="bi bi-recycle"></i> Retrueque</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'inicio' %}">inicio</a>
+                    </li>  
+
+                    
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'CreaPublic' %}">Publicar Artículo</a>
+                        
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'me_solicitudes'%}">Mis Solicitudes</a>
+                    </li>  
+                    
+                    <li class="nav-item">
+                    </li>
+
+                    <li class="nav-item">
+                    <a class="nav-link" href="{% url 'impacto_ambiental' %}"><i class="bi bi-tree"></i> Impacto</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% if messages %}
+  <div class="container mt-3">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+    <div class="container">
+        {% block content %}
+
+<style>
+    /* Usa las variables de colores que ya tienes en tu base */
+    .toolbar { position: sticky; top: 0; z-index: 10; background: var(--eco-sand); padding: .5rem 0 .9rem; }
+    .toolbar .form-control, .toolbar .input-group-text { background: #fff; border-color: #e3ded0; }
+    .toolbar .form-control:focus { border-color: var(--eco-dark-green); box-shadow: 0 0 0 .2rem rgba(44,94,59,.2); }
+    .btn-filtro { color: var(--eco-dark-green); border-color: var(--eco-dark-green); background: transparent; }
+    .btn-filtro:hover { color: #fff; background: var(--eco-dark-green); }
+
+    .pub-card { background: #fff; border: 1px solid #e3ded0; border-radius: 10px; overflow: hidden; height: 100%; display: flex; flex-direction: column; }
+    .pub-img { position: relative; background: #ebe7dc; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; }
+    .pub-img img { width: 100%; height: 100%; object-fit: contain; padding: .5rem; }
+    .pub-inicial { font-size: 6rem; color: #b5b5b5; font-weight: 500; }
+    .pub-estado { position: absolute; left: 8px; bottom: 8px; background: var(--eco-dark-green); color: #fff; font-size: .72rem; font-weight: 600; padding: .15rem .5rem; border-radius: 4px; }
+    .pub-body { padding: .9rem 1rem 1rem; display: flex; flex-direction: column; flex: 1; }
+    .pub-title { font-size: 1rem; font-weight: 600; line-height: 1.3; margin: 0 0 .5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .pub-busca { display: inline-flex; align-items: center; gap: .35rem; background: #dcebdf; color: var(--eco-dark-green); font-size: .85rem; font-weight: 600; padding: .15rem .55rem; border-radius: 4px; align-self: flex-start; }
+    .pub-motivo { color: #66706a; font-size: .85rem; margin: .6rem 0 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .pub-accion { margin-top: auto; padding-top: .9rem; }
+    .pub-nueva { outline: 2px solid var(--eco-dark-green); }
+</style>
+
+<!-- Buscador + Filtro -->
+<div class="toolbar">
+    <div class="row g-2 align-items-center">
+        <div class="col">
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input id="buscador" type="search" class="form-control" placeholder="Buscar lo que ofrecen o lo que buscan" aria-label="Buscar publicaciones">
+            </div>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-filtro" type="button" data-bs-toggle="offcanvas" data-bs-target="#panelFiltros">
+                <i class="bi bi-sliders me-1"></i> Filtro
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Grilla: se llena con lo que mande la vista -->
+<p id="contador" class="text-secondary small mb-2"></p>
+
+<div id="grilla" class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 mb-5">
+    {% for p in publicaciones %}
+    <div class="col"
+            data-id="{{ p.id }}"
+            data-titulo="{{ p.titulo|lower }}"
+            data-estado="{{ p.estado|lower }}"
+            data-texto="{{ p.titulo|lower }} {{ p.busca|lower }} {{ p.motivo|lower }}">
+        <article class="pub-card">
+            <div class="pub-img">
+                {% if p.imagen %}
+                    <img src="{{ p.imagen.url }}" alt="{{ p.titulo }}" loading="lazy">
+                {% else %}
+                    <span class="pub-inicial">{{ p.titulo|first|upper }}</span>
+                {% endif %}
+                {% if p.estado %}<span class="pub-estado">{{ p.estado }}</span>{% endif %}
+            </div>
+            <div class="pub-body">
+                <h3 class="pub-title">{{ p.titulo }}</h3>
+                {% if p.motivo %}<p class="pub-motivo">{{ p.motivo }}</p>{% endif %}
+                <div class="pub-accion">
+                    <a class="btn btn-success w-100" href="{% url 'detalle_publicacion' p.pk %}">Ver más información</a>
+                </div>
+            </div>
+        </article>
+    </div>
+    {% endfor %}
+</div>
+
+<div id="vacio" class="text-center text-secondary py-5 d-none">
+    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+    <p class="mb-0">No hay publicaciones que mostrar.</p>
+</div>
+
+<!-- Panel de filtros -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="panelFiltros" aria-labelledby="tituloFiltros">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="tituloFiltros">Filtros</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="mb-3">
+            <label class="form-label" for="ordenar">Ordenar por</label>
+            <select id="ordenar" class="form-select">
+                <option value="recientes">Más recientes</option>
+                <option value="antiguas">Más antiguas</option>
+                <option value="az">Nombre (A-Z)</option>
+            </select>
+        </div>
+        <div class="mb-4">
+            <label class="form-label" for="estado">Estado del artículo</label>
+            <select id="estado" class="form-select">
+                <option value="">Todos</option>
+                <option value="nuevo">Nuevo</option>
+                <option value="como nuevo">Como nuevo</option>
+                <option value="usado">Usado</option>
+            </select>
+        </div>
+        <div class="d-flex gap-2">
+            <button id="btnLimpiar" class="btn btn-outline-secondary flex-fill" type="button">Limpiar</button>
+            <button id="btnAplicar" class="btn btn-success flex-fill" type="button" data-bs-dismiss="offcanvas">Aplicar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Búsqueda, filtro y orden sobre las tarjetas que ya dibujó Django
+    (function () {
+        const grilla  = document.getElementById('grilla');
+        const vacio   = document.getElementById('vacio');
+        const cuenta  = document.getElementById('contador');
+        const tarjetas = Array.from(grilla.children);
+
+        function aplicar() {
+            const q      = document.getElementById('buscador').value.trim().toLowerCase();
+            const estado = document.getElementById('estado').value;
+            const orden  = document.getElementById('ordenar').value;
+
+            const visibles = tarjetas.filter(c => {
+                const ok = c.dataset.texto.includes(q) && (!estado || c.dataset.estado === estado);
+                c.classList.toggle('d-none', !ok);
+                return ok;
+            });
+
+            const num = c => parseInt(c.dataset.id, 10) || 0;
+            const cmp = {
+                recientes: (a, b) => num(b) - num(a),
+                antiguas:  (a, b) => num(a) - num(b),
+                az:        (a, b) => a.dataset.titulo.localeCompare(b.dataset.titulo, 'es')
+            }[orden];
+
+            tarjetas.sort(cmp).forEach(c => grilla.appendChild(c));
+
+            vacio.classList.toggle('d-none', visibles.length > 0);
+            cuenta.textContent = visibles.length ? visibles.length + ' publicaciones' : '';
+        }
+
+        document.getElementById('buscador').addEventListener('input', aplicar);
+        document.getElementById('btnAplicar').addEventListener('click', aplicar);
+        document.getElementById('btnLimpiar').addEventListener('click', () => {
+            document.getElementById('estado').value = '';
+            document.getElementById('ordenar').value = 'recientes';
+            aplicar();
+        });
+
+        aplicar();
+    })();
+</script>
+
+        {% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

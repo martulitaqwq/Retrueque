@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ publicacion.titulo }} | Retrueque</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --eco-dark-green: #2C5E3B; 
+            --eco-light-green: #528265; 
+            --eco-sand: #F4F1EA; 
+        }
+        
+        body { 
+            background-color: var(--eco-sand); 
+        }
+        
+        /* Contenedor principal */
+        .detail-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            border: 1px solid #e3ded0;
+            padding: 2rem 2.5rem; /* Reducimos el padding vertical superior e inferior */
+        }
+        
+        /* Lado izquierdo: Imagen ESTIRADA hasta abajo para acompañar al texto */
+        .img-container {
+            background-color: #faf9f6; 
+            border: 2px dashed var(--eco-dark-green); 
+            border-radius: 12px;
+            aspect-ratio: 1 / 1; /* Cuadrado perfecto independiente del texto */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .img-placeholder {
+            font-size: 6rem;
+            color: #c4bfae;
+            font-weight: bold;
+        }
+
+        /* Lado derecho: Contenedor de Textos */
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding-left: 1rem;
+        }
+
+        /* Etiqueta de Estado */
+        .badge-estado {
+            background-color: #e8f0ec;
+            color: var(--eco-dark-green);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: inline-block;
+            letter-spacing: 0.5px;
+        }
+
+        /* Botones personalizados */
+        .btn-outline-eco {
+            color: var(--eco-dark-green);
+            border: 1px solid #dcdcdc;
+            background: transparent;
+            font-weight: 600;
+        }
+        .btn-outline-eco:hover {
+            border-color: var(--eco-dark-green);
+            color: var(--eco-dark-green);
+            background: #f8fcf9;
+        }
+        
+        .btn-eco {
+            background-color: var(--eco-dark-green);
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+        .btn-eco:hover {
+            background-color: var(--eco-light-green);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BARRA DE NAVEGACIÓN EN COLOR VERDE -->
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4 shadow-sm" style="background-color: #2C5E3B !important;">
+        <div class="container-xxl px-4 px-lg-5">
+            <a class="navbar-brand fw-bold" href="{% url 'inicio' %}">
+                <i class="bi bi-recycle"></i> Retrueque
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">inicio</a></li>  
+                    <li class="nav-item"><a class="nav-link" href="{% url 'CreaPublic' %}">Publicar Artículo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'me_solicitudes' %}">Mis Solicitudes</a></li> 
+                    <li class="nav-item"><a class="nav-link" href="{% url 'impacto_ambiental' %}"><i class="bi bi-tree"></i> Impacto</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-xxl my-4 px-4 px-lg-5">
+        <div class="detail-card">
+            
+            <!-- ALIGN-ITEMS-STRETCH: Esto obliga a que la imagen y el texto midan lo mismo -->
+            <div class="row align-items-start">
+                
+                <!-- COLUMNA IZQUIERDA: IMAGEN (Tamaño ajustado para el zoom) -->
+                <div class="col-lg-4 col-md-5 mb-4 mb-md-0">
+                    <div class="img-container">
+                        {% if publicacion.imagen %}
+                            <img src="{{ publicacion.imagen.url }}" alt="{{ publicacion.titulo }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            <span class="img-placeholder">{{ publicacion.titulo|slice:":1"|upper }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- COLUMNA DERECHA: INFORMACIÓN (Más ancha para que el texto fluya) -->
+                <div class="col-lg-8 col-md-7">
+                    <div class="content-container">
+                        
+                        <!-- Título -->
+                        <h1 class="fw-bold mb-3" style="color: #1a1a1a; font-size: 2.2rem; line-height: 1.2;">
+                            {{ publicacion.titulo }}
+                        </h1>
+                        
+                        <!-- Píldora de Estado -->
+                        <div class="mb-4">
+                            <span class="badge-estado">
+                                • ESTADO: {% if publicacion.id_cond %}{{ publicacion.id_cond.nombre_condicion|upper }}{% else %}NO ESPECIFICADO{% endif %}
+                            </span>
+                        </div>
+
+                        <!-- Descripción -->
+                        <p class="text-secondary mb-5" style="line-height: 1.6; font-size: 1rem; white-space: pre-line;">
+                            {{ publicacion.descripcion }}
+                        </p>
+
+                        <!-- Iconos inferiores -->
+                        <div class="d-flex flex-wrap gap-5 mb-4 border-top pt-4 mt-auto">
+                            
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded p-2" style="background-color: #f0f4f1;">
+                                    <i class="bi bi-display fs-5" style="color: var(--eco-dark-green);"></i>
+                                </div>
+                                <div>
+                                    <div class="text-muted" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">Categoría</div>
+                                    <div class="fw-bold text-dark" style="font-size: 0.95rem;">{{ publicacion.categoria }}</div>
+                                </div>
+                            </div>
+                            
+                            {% if publicacion.id_comu %}
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded p-2" style="background-color: #f0f4f1;">
+                                    <i class="bi bi-geo-alt fs-5" style="color: var(--eco-dark-green);"></i>
+                                </div>
+                                <div>
+                                    <div class="text-muted" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">Ubicación</div>
+                                    <div class="fw-bold text-dark" style="font-size: 0.95rem;">{{ publicacion.id_comu.nombre_comuna }}</div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                        </div>
+
+                        <!-- Botones de Acción -->
+                        <div class="d-flex flex-wrap gap-3">
+                            <a href="{% url 'inicio' %}" class="btn btn-outline-eco px-4 py-2 rounded-3 flex-fill text-center transition">
+                                <i class="bi bi-arrow-left me-2"></i> Volver al inicio
+                            </a>
+
+                            <a href="{% url 'publicacion_update' publicacion.pk %}" class="btn btn-outline-eco px-4 py-2 rounded-3 flex-fill text-center transition">
+                                <i class="bi bi-pencil-square me-2"></i> Modificar Publicación
+                            </a>
+                            
+                            <button type="button" class="btn btn-eco px-4 py-2 rounded-3 flex-fill text-center transition shadow-sm" data-bs-toggle="modal" data-bs-target="#modalIntercambio">
+                                <i class="bi bi-arrow-left-right me-2"></i> Solicitar Intercambio
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <!-- Modal de Confirmación de Intercambio -->
+    <div class="modal fade" id="modalIntercambio" tabindex="-1" aria-labelledby="modalIntercambioLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+                <div class="modal-header border-0 pb-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body text-center px-4 pb-4">
+                    <div class="mb-3">
+                        <i class="bi bi-arrow-left-right" style="font-size: 3.5rem; color: var(--eco-dark-green);"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-3">Confirmar propuesta</h4>
+                    <p class="text-secondary fs-6 mb-4">¿Estás seguro de que deseas proponer un intercambio por el artículo <br><strong>"{{ publicacion.titulo }}"</strong>?</p>
+                    
+                    <!-- FORMULARIO POST QUE CONECTA CON TU VISTA CREARSOLICITUDVIEW -->
+                    <form action="{% url 'crear_solicitud' publicacion.pk %}" method="POST">
+                        {% csrf_token %}
+                        <div class="d-flex gap-3 justify-content-center">
+                            <button type="button" class="btn btn-outline-secondary px-4 py-2 rounded-3" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-eco px-4 py-2 rounded-3">Sí, continuar</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
